@@ -29,10 +29,7 @@ def dfs(v, p=-1):
     colors[v] = "g"
     timer += 1
     tin[v] = timer   
-
-
-    paths[v] = 1 + sum(paths[u] for u in g[v])
-
+    
     for u in g[v]:
         if colors[u] == "g":
             print(f"found cycle {v}->{u}")
@@ -56,7 +53,17 @@ def top_sort():
         x for y, x in sorted(zip(tout, vert_list), key=lambda pair: pair[0], reverse = True)
     ]
     return ans
+    
+ts = top_sort()
+path = [1] * len(ts)  
+index_dict = {vertex: idx for idx, vertex in enumerate(ts)}
 
+for vertex in reversed(ts[:-1]):  
+    vertex_index = index_dict[vertex]
+    adjacent_vertices = adj_list[vertex]
+    
+    for adj_vertex in adjacent_vertices:
+        adj_vertex_index = index_dict[adj_vertex]
+        path[vertex_index] += path[adj_vertex_index]
 
-paths_count = top_sort()
-print("Количество путей к каждой вершине:", paths_count)
+print(path)    
